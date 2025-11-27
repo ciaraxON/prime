@@ -1,16 +1,12 @@
 # Dockerfile
 FROM maven:3.9.4-eclipse-temurin-17 AS build
 WORKDIR /app
-
-# copy sources and build
-COPY . .
+COPY pom.xml .
+COPY src ./src
 RUN mvn -B -DskipTests clean package
 
-FROM eclipse-temurin:17-jdk-jammy
+FROM eclipse-temurin:17-jre
 WORKDIR /app
-
-# copy the built jar (wildcard ok if only one)
-COPY --from=build /app/target/*.jar app.jar
-
+COPY --from=build /app/target/prime-0.0.1-SNAPSHOT.jar ./prime.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java","-jar","/app/prime.jar"]
