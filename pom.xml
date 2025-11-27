@@ -72,16 +72,15 @@
                  Replace the executable path below with your JDK 21 path on Windows, e.g.
                  C:\Program Files\Java\jdk-21\bin\javac.exe -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
-                <configuration>
-                    <release>${java.version}</release>
-                    <fork>true</fork>
-                    <executable>C:\Program Files\Java\jdk-21\bin\javac.exe</executable>
-                    <showWarnings>true</showWarnings>
-                </configuration>
-            </plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+                    <configuration>
+                      <release>${java.version}</release>
+                      <fork>true</fork>
+                      <showWarnings>true</showWarnings>
+                    </configuration>
+         </plugin>
 
             <!-- Spring Boot repackage -->
             <plugin>
