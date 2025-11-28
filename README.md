@@ -9,7 +9,7 @@ Write a RESTful service which calculates and returns all the prime numbers up to
 
 ### The project must be written in Java 17 or 20;
 
-[`pom.xml` (Java 17)](https://github.com/ciaraxON/prime/blob/main/pom.xml)
+[`pom.xml` (Java 17)](pom.xml)
 
 ### The project must use Maven OR Gradle to build, test and run;
 
@@ -48,11 +48,13 @@ See deployed code at: https://prime-1-k912.onrender.com/api/primes/ui
 
 ### The API must be appropriately (to your discretion) documented;
 
+algorithm documentation can be found here: [`algorithms.md`](algorithms.md)
+
 ### You may use any other frameworks or libraries for support e.g. Lombok, Rest Assured etc.;
 
-- See `pom.xml` for declared dependencies and build plugins: [`pom.xml`](https://github.com/ciaraxON/prime/blob/main/pom.xml)
-- Integration testing: project uses RestAssured — see `src/test/java/com/example/prime/integration/PrimeControllerTest.java` ([file](https://github.com/ciaraxON/prime/blob/main/src/test/java/com/example/prime/integration/PrimeControllerTest.java)).
-- XML support: Jackson 3 XML is included and used by the response model — see `pom.xml` and `src/main/java/com/example/prime/model/PrimeResponse.java` ([file](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/model/PrimeResponse.java)).
+- See [`pom.xml`](pom.xml) for declared dependencies and build plugins
+- Integration testing: project uses RestAssured — see [`PrimeControllerTest.java`](https://github.com/ciaraxON/prime/blob/main/src/test/java/com/example/prime/integration/PrimeControllerTest.java).
+- XML support: Jackson 3 XML is included and used by the response model — see [`pom.xml`](pom.xml) and [`PrimeResponse.java`](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/model/PrimeResponse.java).
 
 ### The project must be accessible from Github – if you do not wish to make it public, please add my user to the repository: Your Github account name.
 
@@ -85,30 +87,32 @@ See deployed code at: https://prime-1-k912.onrender.com/api/primes/ui
     ```
 
 - Implementation notes:
-  - Content negotiation is configured in `src/main/java/com/example/prime/config/FormatConfig.java` (maps `format` param to `json`/`xml`).
-  - Controller produces both media types: `src/main/java/com/example/prime/controller/PrimeController.java`.
-  - XML serialization uses Jackson XML annotations on the response model: `src/main/java/com/example/prime/model/PrimeResponse.java`.
-  - Dependency providing XML support: `tools.jackson.dataformat:jackson-dataformat-xml` in `pom.xml`.
+  - Content negotiation is configured in [`FormatConfig.java`](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/config/FormatConfig.java) (maps `format` param to `json`/`xml`).
+  - Controller produces both media types: [`PrimeController.java`](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/controller/PrimeController.java).
+  - XML serialization uses Jackson XML annotations on the response model: [`PrimeResponse.java`](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/model/PrimeResponse.java).
+  - Dependency providing XML support: `tools.jackson.dataformat:jackson-dataformat-xml` in [`pom.xml`](pom.xml).
 
 - Tests:
-  - Integration tests demonstrating JSON/XML are in `src/test/java/com/example/prime/integration/PrimeControllerTest.java` but are currently disabled due to a RestAssured/Jackson3 compatibility issue. Re-enable after resolving that compatibility problem.
+  - Integration tests demonstrating JSON/XML are in [`PrimeControllerTest.java`](https://github.com/ciaraxON/prime/blob/main/src/test/java/com/example/prime/integration/PrimeControllerTest.java) but are currently disabled due to a RestAssured/Jackson3 compatibility issue. Re-enable after resolving that compatibility problem.
 
 ### Consider ways to improve overall performance e.g. caching results, concurrent algorithm;
 
 This project includes several implemented optimisations to improve throughput and reduce repeated work:
 
 - Caching
-  - Implemented via Spring Cache and a simple in-memory store.
-  - See `src/main/java/com/example/prime/config/CacheConfig.java` and the `@Cacheable` annotation on `src/main/java/com/example/prime/service/PrimeService.java` (cache name `primeResults`).
-  - Cache key: string of `limit` + `-` + algorithm name (or `DEFAULT`).
- 
+    - Implemented via Spring Cache and a simple in-memory store.
+    - See [`CacheConfig.java`](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/config/CacheConfig.java) and the `@Cacheable` annotation on [`PrimeService.java`](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/service/PrimeService.java) (cache name `primeResults`):
+
+    - Cache key: string of `limit` + `-` + algorithm name (or `DEFAULT`).
+
 - Concurrent / parallel algorithms
-  - `ParallelAlgorithm` (`src/main/java/com/example/prime/service/algorithm/ParallelAlgorithm.java`) uses parallel processing of base primes to mark multiples for faster execution on multi-core machines.
-  - `SegmentedSieve` (`src/main/java/com/example/prime/service/algorithm/SegmentedSieve.java`) reduces memory footprint by processing ranges in segments and is suitable for very large limits.
-  - Both implementations are registered as Spring services and selected via `AlgorithmSelector` (`src/main/java/com/example/prime/service/AlgorithmSelector.java`).
+    - [`ParallelAlgorithm.java`](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/service/algorithm/ParallelAlgorithm.java) uses parallel processing of base primes to mark multiples for faster execution on multi-core machines.
+    - [`SegmentedSieve.java`](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/service/algorithm/SegmentedSieve.java) reduces memory footprint by processing ranges in segments and is suitable for very large limits.
+    - Both implementations are registered as Spring services and selected via [`AlgorithmSelector.java`](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/service/AlgorithmSelector.java).
 
 - Automatic algorithm selection and tuning
-  - `AlgorithmSelector` chooses the best algorithm based on the requested `limit` using configurable thresholds defined in the class.
+    - [`AlgorithmSelector.java`](https://github.com/ciaraxON/prime/blob/main/src/main/java/com/example/prime/service/AlgorithmSelector.java) chooses the best algorithm based on the requested `limit` using configurable thresholds defined in the class.
+
 
 ### Consider supporting multiple algorithms that can be switched based on optional parameters.
 
