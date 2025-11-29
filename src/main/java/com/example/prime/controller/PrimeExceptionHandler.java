@@ -35,6 +35,11 @@ public class PrimeExceptionHandler {
     public ResponseEntity<String> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         String param = ex.getName();
         if ("limit".equals(param)) {
+            // if conversion failed due to NumberFormatException (e.g. overflow or non-numeric)
+            Throwable cause = ex.getCause();
+            if (cause instanceof NumberFormatException) {
+                return bad(String.format("integer is too large to process", 2, Integer.MAX_VALUE));
+            }
             return bad("must be an integer");
         }
         String requiredType = ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "expected type";
