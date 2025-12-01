@@ -42,7 +42,7 @@ public class PrimeUiController {
                     <option value="">(auto)</option>
                     <option value="TRIAL_DIVISION">TRIAL_DIVISION</option>
                     <option value="SIEVE_OF_ERATOSTHENES">SIEVE_OF_ERATOSTHENES</option>
-                    <option value="PARALLEL">PARALLEL</option>
+                    <option value="PARRALEL_ALGORITHM">PARRALEL_ALGORITHM</option>
                     <option value="SEGMENTED_SIEVE">SEGMENTED_SIEVE</option>
                   </select>
                 </label>
